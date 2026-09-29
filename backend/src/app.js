@@ -12,7 +12,7 @@
 
 const express = require('express');
 const multer = require('multer');
-const { createDocumentRoutes } = require('./routes/documentos.routes');
+const { createDocumentRoutes } = require('./routes/document.routes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
