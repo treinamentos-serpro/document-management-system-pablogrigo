@@ -11,6 +11,8 @@
 // usando multer com diskStorage. Não utilize provedores externos.
 
 const express = require('express');
+const multer = require('multer');
+const { createDocumentRoutes } = require('./routes/documentos.routes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -21,6 +23,38 @@ app.use(express.json());
 // /documents/:id/download) serão implementadas durante o Passo 2.
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
+});
+
+const documentRoutes = createDocumentRoutes();
+app.post('/upload', ...documentRoutes.upload);
+app.get('/documents', documentRoutes.list);
+app.get('/documents/:id/download', documentRoutes.download);
+
+app.use((error, request, response, next) => {
+  if (response.headersSent) {
+    return next(error);
+  }
+
+  if (error instanceof multer.MulterError) {
+    const tooManyFiles = error.code === 'LIMIT_UNEXPECTED_FILE';
+    return response.status(error.code === 'LIMIT_FILE_SIZE' ? 413 : 400).json({
+      error: {
+        code: error.code === 'LIMIT_FILE_SIZE' ? 'FILE_TOO_LARGE' : (tooManyFiles ? 'TOO_MANY_FILES' : 'FILE_REQUIRED'),
+        message: error.code === 'LIMIT_FILE_SIZE'
+          ? 'O arquivo excede o tamanho máximo permitido.'
+          : (tooManyFiles ? 'Envie apenas um arquivo.' : 'Envie um arquivo no campo file.'),
+      },
+    });
+  }
+
+  const statusByCode = {
+    DOCUMENT_NOT_FOUND: 404,
+    FILE_REQUIRED: 400,
+  };
+  const status = error.status || statusByCode[error.code] || 500;
+  const code = error.code || 'UPLOAD_FAILED';
+  const message = status === 404 ? 'Documento não encontrado.' : error.message;
+  return response.status(status).json({ error: { code, message } });
 });
 
 if (require.main === module) {
