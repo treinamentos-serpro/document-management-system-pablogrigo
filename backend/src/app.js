@@ -30,7 +30,13 @@ app.post('/upload', ...documentRoutes.upload);
 app.get('/documents', documentRoutes.list);
 app.get('/documents/:id/download', documentRoutes.download);
 
-app.use((error, request, response, next) => {
+const publicServerErrors = {
+  UPLOAD_FAILED: 'Não foi possível salvar o documento.',
+  DOCUMENT_LIST_FAILED: 'Não foi possível listar os documentos.',
+  DOWNLOAD_FAILED: 'Não foi possível baixar o documento.',
+};
+
+function handleApiError(error, request, response, next) {
   if (response.headersSent) {
     return next(error);
   }
@@ -52,10 +58,23 @@ app.use((error, request, response, next) => {
     FILE_REQUIRED: 400,
   };
   const status = error.status || statusByCode[error.code] || 500;
-  const code = error.code || 'UPLOAD_FAILED';
-  const message = status === 404 ? 'Documento não encontrado.' : error.message;
+  const isServerError = status >= 500;
+
+  if (isServerError) {
+    console.error('Erro interno ao processar requisição:', error);
+  }
+
+  const knownServerError = publicServerErrors[error.code];
+  const code = isServerError
+    ? (knownServerError ? error.code : 'INTERNAL_SERVER_ERROR')
+    : (error.code || 'UPLOAD_FAILED');
+  const message = isServerError
+    ? (knownServerError || 'Ocorreu um erro interno.')
+    : (status === 404 ? 'Documento não encontrado.' : error.message);
   return response.status(status).json({ error: { code, message } });
-});
+}
+
+app.use(handleApiError);
 
 if (require.main === module) {
   app.listen(PORT, () => {
@@ -64,3 +83,4 @@ if (require.main === module) {
 }
 
 module.exports = app;
+module.exports.handleApiError = handleApiError;
