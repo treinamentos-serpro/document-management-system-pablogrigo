@@ -1,0 +1,191 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap');
+
+:root {
+  font-family: 'DM Sans', sans-serif;
+  color: #20312d;
+  background: #f4f6f2;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --ink: #20312d;
+  --muted: #718079;
+  --line: #e2e8e2;
+  --green: #236b51;
+  --green-dark: #18533e;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background-image: linear-gradient(120deg, rgba(222, 235, 221, .55), transparent 48%),
+    radial-gradient(ellipse at 90% 5%, rgba(227, 211, 184, .35), transparent 34%);
+}
+
+button, input { font: inherit; }
+button { cursor: pointer; }
+
+.app-shell {
+  width: min(920px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 52px 0 80px;
+  animation: enter .45s ease-out both;
+}
+
+.page-header, .section-heading { display: flex; align-items: center; }
+.page-header { gap: 15px; margin-bottom: 36px; }
+.brand-mark {
+  display: grid;
+  width: 46px;
+  aspect-ratio: 1;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--green);
+  color: white;
+  font: 800 21px 'Manrope', sans-serif;
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  color: var(--green);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.1px;
+}
+
+h1, h2, p { margin-top: 0; }
+h1, h2 { font-family: 'Manrope', sans-serif; }
+h1 { margin-bottom: 0; font-size: 25px; font-weight: 700; }
+h2 { margin-bottom: 0; font-size: 17px; font-weight: 700; }
+
+.workspace {
+  overflow: hidden;
+  border: 1px solid #e4e9e2;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .88);
+  box-shadow: 0 16px 44px rgba(42, 64, 49, .06);
+}
+
+.upload-section, .list-section { padding: 28px 32px; }
+.upload-section { border-bottom: 1px solid var(--line); background: #fbfcfa; }
+.section-heading { justify-content: space-between; margin-bottom: 20px; }
+.file-limit, .document-count { color: var(--muted); font-size: 12px; }
+.document-count {
+  display: grid;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 7px;
+  place-items: center;
+  border-radius: 14px;
+  background: #edf3ee;
+  color: var(--green-dark);
+  font-weight: 700;
+}
+
+.upload-form { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; }
+.file-picker {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 13px;
+  padding: 12px 15px;
+  border: 1px dashed #b8c8bd;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+}
+.file-picker:hover { border-color: var(--green); background: #fcfefc; }
+.upload-icon {
+  display: grid;
+  width: 35px;
+  height: 35px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 6px;
+  background: #eaf2ec;
+  color: var(--green);
+  font-size: 22px;
+}
+.file-picker-copy { display: grid; min-width: 0; gap: 3px; }
+.file-picker-copy strong, .file-picker-copy span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.file-picker-copy strong { font-size: 13px; font-weight: 600; }
+.file-picker-copy span { color: var(--muted); font-size: 11px; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; clip-path: inset(50%); }
+.file-picker:focus-within { outline: 2px solid #73a58d; outline-offset: 2px; }
+
+.primary-button {
+  min-width: 138px;
+  padding: 0 17px;
+  border: 0;
+  border-radius: 6px;
+  background: var(--green);
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+}
+.primary-button:hover:not(:disabled) { background: var(--green-dark); }
+.primary-button:disabled { cursor: not-allowed; opacity: .48; }
+.form-message, .form-error { grid-column: 1 / -1; margin: -2px 0 0; font-size: 12px; }
+.form-message { color: var(--green); }
+.form-error, .list-error, .download-error { color: #a33e35; }
+
+.list-heading { margin-bottom: 8px; }
+.document-list { margin: 0; padding: 0; list-style: none; }
+.document-row {
+  display: flex;
+  min-height: 70px;
+  align-items: center;
+  gap: 14px;
+  border-bottom: 1px solid #edf0ed;
+}
+.document-row:last-child { border-bottom: 0; }
+.document-icon {
+  display: grid;
+  width: 38px;
+  height: 42px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid #dce7de;
+  border-radius: 5px;
+  background: #f5f9f5;
+  color: var(--green);
+  font-size: 8px;
+  font-weight: 700;
+}
+.document-info { display: grid; min-width: 0; flex: 1; gap: 5px; }
+.document-name { overflow: hidden; font-size: 13px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.document-info > span { color: var(--muted); font-size: 11px; }
+.metadata-divider { padding: 0 3px; color: #a8b2ac; }
+.download-control { position: relative; }
+.download-button {
+  display: grid;
+  width: 36px;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: white;
+  color: var(--green-dark);
+  font-size: 20px;
+  line-height: 1;
+}
+.download-button:hover:not(:disabled) { border-color: #9bb9a5; background: #f3f8f4; }
+.download-button:disabled { cursor: wait; opacity: .55; }
+.download-error { position: absolute; right: 0; bottom: calc(100% + 7px); width: max-content; max-width: 230px; padding: 6px 8px; border-radius: 4px; background: #fff1ef; font-size: 11px; }
+.list-placeholder { margin: 0; padding: 27px 0 8px; color: var(--muted); font-size: 13px; }
+.list-error { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 12px; border-radius: 5px; background: #fff1ef; font-size: 12px; }
+.text-button { padding: 4px; border: 0; background: transparent; color: var(--green-dark); font-size: 12px; font-weight: 700; white-space: nowrap; }
+
+@keyframes enter { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (max-width: 600px) {
+  .app-shell { width: calc(100% - 32px); padding-top: 30px; }
+  .page-header { margin-bottom: 25px; }
+  .upload-section, .list-section { padding: 22px 18px; }
+  .upload-form { grid-template-columns: 1fr; }
+  .primary-button { min-height: 44px; }
+  .document-row { gap: 10px; }
+  .document-info > span { font-size: 10px; }
+  .list-error { align-items: flex-start; flex-direction: column; gap: 5px; }
+}
